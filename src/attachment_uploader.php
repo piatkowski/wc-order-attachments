@@ -26,7 +26,21 @@ final class WCOA_Attachment_Uploader {
 	 * @return mixed
 	 */
 	static function upload_dir( $param ) {
-		$upload_path     = self::get_upload_path() . '/' . date( 'Y/m' );
+
+		$upload_path = self::get_upload_path();
+
+		if ( ! file_exists( $upload_path ) ) {
+			wp_mkdir_p( $upload_path );
+		}
+
+		if ( ! file_exists( $upload_path . '/index.php' ) ) {
+			file_put_contents( $upload_path . '/index.php', '' );
+		}
+		if ( ! file_exists( $upload_path . '/.htaccess' ) ) {
+			file_put_contents( $upload_path . '/.htaccess', 'deny from all' );
+		}
+
+		$upload_path     = $upload_path . '/' . date( 'Y/m' );
 		$param['path']   = $upload_path;
 		$param['subdir'] = str_replace( $param['basedir'], '', $param['path'] );
 

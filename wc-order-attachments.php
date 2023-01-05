@@ -28,6 +28,30 @@ final class WCOA_Plugin {
 		WCOA_Attachment_Uploader::init();
 		WCOA_File_Access::init();
 		WCOA_Customer_Integrator::init();
+		add_action( 'admin_init', [ __CLASS__, 'add_options' ] );
+
+	}
+
+	/**
+	 * Add options to WP Settings
+	 * @return void
+	 */
+	static function add_options() {
+		add_settings_field(
+			'wcoa_upload_path',
+			__( 'Order Attachments Upload Path', 'wc-order-attachments' ),
+			[ __CLASS__, 'render_options' ],
+			'media'
+		);
+		register_setting( 'media', 'wcoa_upload_path' );
+	}
+
+	static function render_options() {
+		$upload_path = get_option( 'wcoa_upload_path' );
+		?>
+        <input name="wcoa_upload_path" type="text" id="wcoa_upload_path" autocomplete="off"
+               value="<?php echo esc_html($upload_path); ?>" class="regular-text code">
+		<?php
 	}
 
 	/**
@@ -45,14 +69,6 @@ final class WCOA_Plugin {
 				echo __( 'Upload directory cannot be created', 'wc-order-attachments' );
 			}
 		}
-		if ( $upload_path ) {
-			if ( ! file_exists( $upload_path . '/index.php' ) ) {
-				file_put_contents( $upload_path . '/index.php', '' );
-			}
-			if ( ! file_exists( $upload_path . '/.htaccess' ) ) {
-				file_put_contents( $upload_path . '/.htaccess', 'deny from all' );
-			}
-		}
 
 		$salt = uniqid() . uniqid();
 		update_option( 'wcoa_salt', $salt );
@@ -66,7 +82,7 @@ final class WCOA_Plugin {
 	 */
 	static function deactivate() {
 		flush_rewrite_rules();
-		delete_option('wcoa_salt');
+		delete_option( 'wcoa_salt' );
 	}
 
 	/**
