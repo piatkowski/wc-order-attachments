@@ -3,7 +3,7 @@
 /*
 Plugin Name: Order Attachments for WooCommerce
 Description: Plugin allows to add attachments to orders in WooCommerce. Files are protected and available for download by the buyer.
-Version: 1.0.1
+Version: 1.0.2
 Author: Krzysztof Piątkowski
 License: GPLv2
 */
@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || die( 'No direct access.' );
 include __DIR__ . '/loader.php';
 
 final class WCOA_Plugin {
-	const VERSION = '1.0.1';
+	const VERSION = '1.0.2';
 	const DEBUG = false;
 
 	/**
